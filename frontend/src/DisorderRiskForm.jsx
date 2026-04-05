@@ -33,7 +33,7 @@ export default function DisorderRiskForm() {
     };
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/disorder_risk_inference", {
+      const res = await fetch("http://localhost/api/disorder_risk_inference", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
