@@ -60,6 +60,7 @@ logger.info("log:loaded model successfully")
 
 origins = [
     "http://localhost:3000",
+    "http://localhost",
 ]
 
 app.add_middleware(
