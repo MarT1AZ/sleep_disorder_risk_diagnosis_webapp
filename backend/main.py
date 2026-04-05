@@ -1,10 +1,10 @@
 
 import uvicorn
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
 from sklearn import tree
+import sys
 import joblib
 import logging
 import numpy as np
@@ -47,29 +47,21 @@ class UserInput(BaseModel):
 app = FastAPI()
 
 # config
-MODEL_PATH = "model/decisionTree_sleep_risk_classifier"
+MODEL_PATH = "./model/decisionTree_sleep_risk_classifier"
 
 # init
 logger = logging.getLogger(__name__)
 logging.basicConfig(level = logging.INFO)
 risk_type_map = {0:'Healthy',1:'Severe',2:'Mild',3:'Moderate'}
-classifier = joblib.load(MODEL_PATH)
-logger.info("log:loaded model successfully")
+try:
+    classifier = joblib.load(MODEL_PATH)
+    logger.info("log:loaded model successfully")
+except FileNotFoundError:
+    logger.error(f"Model file not found at {MODEL_PATH}")
+    sys.exit(1)  
+except Exception as e:
+    logger.error(f"Error loading model: {e}")
 
-
-
-origins = [
-    "http://localhost:3000",
-    "http://localhost",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins = origins,
-    allow_credentials = True,
-    allow_methods=["*"],
-    allow_headers = ['*'],
-)
 
 
 @app.get("/test_get")
@@ -105,4 +97,4 @@ def test_model_process_avaiability(user_input : UserInput):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host = "127.0.0.1", port = 8000)
+    uvicorn.run(app, host = "0.0.0.0", port = 8000)
