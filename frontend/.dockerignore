@@ -2,3 +2,5 @@ node_modules/
 README
 .gitignore
 *.md
+Dockerfile
+Dockerfile.dev
