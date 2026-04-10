@@ -18,8 +18,8 @@ services:
     build: 
       context: ./frontend
       dockerfile: dockerfile.dev
-    # volumes:
-    #   - ./frontend/src:/app/src
+    volumes:
+      - ./frontend/src:/app/src
     ports:
        - "3000:3000"
     depends_on:
