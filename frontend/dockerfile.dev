@@ -9,6 +9,7 @@ COPY package-lock.json .
 
 RUN npm install
 
-COPY . .
+COPY . . 
+# mount /src to /app/src for editting frontend for hot reload
 
 CMD ["npm","start"]
