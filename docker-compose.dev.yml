@@ -1,0 +1,33 @@
+version: "1"
+services:
+  ml_backend:
+    build: ./backend
+    networks:
+      - gateway_2_backend
+  
+  nginx_gateway:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - ml_backend
+    networks:
+      - gateway_2_backend
+
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: dockerfile.dev
+    # volumes:
+    #   - ./frontend/src:/app/src
+    ports:
+       - "3000:3000"
+    depends_on:
+      - nginx_gateway
+
+networks:
+  gateway_2_backend:
+    driver: bridge
+
+  
+
