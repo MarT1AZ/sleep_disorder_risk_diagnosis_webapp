@@ -38,11 +38,19 @@ export default function DisorderRiskForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+      if (res.status === 503) {
+        throw new Error("Too many requests — please wait a moment and try again.");
+      }
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
       const data = await res.json();
       setResult(data.risk_type);
     } catch (err) {
-      setError(err.message);
+      if (err instanceof TypeError && err.message === "Failed to fetch") {
+        setError("Unable to reach the server. Please check your connection and try again.");
+      } else {
+        setError(err.message);
+      }
+      // setError(err.message);
     }
 
     setLoading(false);
@@ -161,3 +169,5 @@ export default function DisorderRiskForm() {
     </div>
   );
 }
+
+
